@@ -25,8 +25,10 @@ const script string = "#!/bin/sh" +
 	"ifconfig ath0 up\n" +
 	"ifconfig wifi0 up\n" +
 	"echo \"countrycode=511\" > /var/etc/atheros.conf\n" +
-	"sed -i ‘s/840/511/g’ /tmp/system.cfg\n" +
-	"echo \"<option value=\"511\">Compliance Test</option>\" >> /var/etc/ccodes.inc\n"
+	"sed -i ‘s/840/511/g’ /tmp/system.cfg\n"
+
+const option_pre_6 = "echo \"<option value=\"511\">Compliance Test</option>\" >> /var/etc/ccodes.inc\n"
+const option_post_6 = "echo \"<option value=\"511\">Licensed</option>\" >> /var/etc/ccodes.inc"
 
 func get_ssh() *easyssh.MakeConfig {
 	ssh := &easyssh.MakeConfig{
@@ -63,11 +65,16 @@ func international() {
 	exec_ssh("reboot", ssh)
 }
 
-func non_international() {
+func non_international(ispostsix bool) {
 	ssh := get_ssh()
 	exec_ssh("rm /etc/persistent/rc.poststart", ssh)
 	for _, line := range strings.Split(script, "\n") {
 		fmt.Println(exec_ssh("echo "+line+" >> /etc/persistent/rc.poststart", ssh))
+	}
+	if ispostsix {
+		fmt.Println(exec_ssh("echo "+option_post_6+" >> /etc/persistent/rc.poststart", ssh))
+	} else {
+		fmt.Println(exec_ssh("echo "+option_pre_6+" >> /etc/persistent/rc.poststart", ssh))
 	}
 	exec_ssh("chmod +x /etc/persistent/rc.poststart", ssh)
 	exec_ssh("cfgmtd -w -p /etc", ssh)
@@ -82,7 +89,8 @@ func main() {
 	fmt.Println("---------------------------------------")
 	fmt.Println("Seleccione una opción")
 	fmt.Println("1. Equipos internacionales")
-	fmt.Println("2. Equipos no internacionales")
+	fmt.Println("2. Equipos no internacionales anteriores a 6.x.x")
+	fmt.Println("3. Equipos no internacionales posteriores a 6.x.x")
 	fmt.Println("0. Salir")
 
 	for {
@@ -98,7 +106,9 @@ func main() {
 			case 1:
 				international()
 			case 2:
-				non_international()
+				non_international(false)
+			case 3:
+				non_international(true)
 			default:
 				continue
 			}
