@@ -28,7 +28,7 @@ const script string = "#!/bin/sh" +
 	"sed -i ‘s/840/511/g’ /tmp/system.cfg\n"
 
 const option_pre_6 = "echo \"<option value=\"511\">Compliance Test</option>\" >> /var/etc/ccodes.inc\n"
-const option_post_6 = "echo \"<option value=\"511\">Licensed</option>\" >> /var/etc/ccodes.inc"
+const option_post_6 = "echo \"<option value=\"511\">Licensed</option>\" >> /var/etc/ccodes.inc\n"
 
 func get_ssh() *easyssh.MakeConfig {
 	ssh := &easyssh.MakeConfig{
