@@ -8,6 +8,7 @@ import (
 	"bufio"
 	"os"
 	"strconv"
+	"github.com/fatih/color"
 )
 
 const host string = "192.168.1.20"
@@ -82,9 +83,17 @@ func non_international(ispostsix bool) {
 }
 
 func main() {
-	fmt.Println("============[ CTerminator ]============")
+
+	s := `   ____________                    _             __
+  / ____/_  __/__  _________ ___  (_)___  ____ _/ /_____  _____
+ / /     / / / _ \/ ___/ __  __ \/ / __ \/ __  / __/ __ \/ ___/
+/ /___  / / /  __/ /  / / / / / / / / / / /_/ / /_/ /_/ / /
+\____/ /_/  \___/_/  /_/ /_/ /_/_/_/ /_/\__,_/\__/\____/_/
+                                                               `
+
+	color.Cyan(s)
 	fmt.Println("Activador de modo Compliance Test para equipamiento de Ubiquiti\n")
-	fmt.Println("ADVERTENCIA: Los autores de este programa no se responsabilizan por los daños que el mismo pueda " +
+	color.Red("ADVERTENCIA: Los autores de este programa no se responsabilizan por los daños que el mismo pueda " +
 		"ocasionar a su equipo. Recibe el mismo sin ninguna garantía. Úselo bajo su responsabilidad.")
 	fmt.Println("---------------------------------------")
 	fmt.Println("Seleccione una opción")
